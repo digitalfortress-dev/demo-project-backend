@@ -17,12 +17,6 @@ func GetMigrations(db *gorm.DB) *gormigrate.Gormigrate {
 				}
 				return nil
 			},
-			// Rollback: func(tx *gorm.DB) error {
-			// 	if err := tx.DropTable("model").Error; err != nil {
-			// 		return nil
-			// 	}
-			// 	return nil
-			// },
 		},
 	})
 

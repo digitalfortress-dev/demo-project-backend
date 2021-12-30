@@ -20,7 +20,7 @@ func main() {
 	api.Use(middleware.CORSWithConfig(middleware.CORSConfig{
 		AllowOrigins: []string{"*"},
 		AllowMethods: []string{echo.POST, echo.GET},
-}))
+	}))
 	db := database.GetInstance()
 	db.DropTable("migrations")
 	db.DropTableIfExists(&Patient.Patient{})

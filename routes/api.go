@@ -15,6 +15,7 @@ func DefineApiRoute(e *echo.Echo) {
 		routes = append(routes, controller.Routes()...)
 	}
 	api := e.Group("/api")
+	admin_api := e.Group("/api/admin")
 	e.Static("/api/upload-photo", "patient")
 	for _, route := range routes {
 		switch route.Method {
@@ -25,7 +26,7 @@ func DefineApiRoute(e *echo.Echo) {
 			}
 		case echo.GET:
 			{
-				api.GET(route.Path, route.Handler)
+				admin_api.GET(route.Path, route.Handler, route.Middleware...)
 				break
 			}
 		}

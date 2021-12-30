@@ -1,14 +1,12 @@
 package token
 
 import (
-	_ "errors"
 	"time"
 
 	"github.com/dgrijalva/jwt-go"
 	"github.com/google/uuid"
 )
 
-// Payload contains the payload data of the token
 type Payload struct {
 	jwt.StandardClaims
 	ID        uuid.UUID `json:"id"`
@@ -24,7 +22,7 @@ func NewPayload(username string, duration time.Duration) (*Payload, error) {
 		ID:        tokenID,
 		Username:  username,
 		IssuedAt:  time.Now(),
-		ExpiredAt: time.Now().Add(duration),
+		ExpiredAt: time.Now().Add(time.Duration(duration.Minutes())),
 	}
 
 	return payload, nil
