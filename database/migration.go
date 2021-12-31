@@ -8,6 +8,7 @@ import (
 )
 
 func GetMigrations(db *gorm.DB) *gormigrate.Gormigrate {
+
 	return gormigrate.New(db, gormigrate.DefaultOptions, []*gormigrate.Migration{
 		{
 			ID: "20212412",

@@ -101,7 +101,7 @@ func validate_input(data interface{}) (bool, string) {
 
 func (controller PatientController) GetPatients(ctx echo.Context) error {
 
-	var patient model.Patient
+	var patient []model.Patient
 	db := database.GetInstance()
 	data := db.Find(&patient)
 
@@ -126,8 +126,8 @@ func (controller PatientController) UploadPhoto(ctx echo.Context) error {
 		ctx.JSON(http.StatusBadRequest, err)
 	}
 	defer src.Close()
-	filePath := "./patient/" + file.Filename
-	fileSrc := " http://localhost:1323/api/upload-photo/" + file.Filename
+	filePath := "./patient/photos/" + file.Filename
+	fileSrc := "http://localhost:1323/api/upload-photo/" + file.Filename
 	dst, err := os.Create(filePath)
 	if err != nil {
 		ctx.JSON(http.StatusBadRequest, err)
