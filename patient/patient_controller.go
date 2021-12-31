@@ -13,8 +13,8 @@ import (
 	"strings"
 
 	"github.com/labstack/echo/v4"
-	"gopkg.in/go-playground/validator.v9"
 	pusher "github.com/pusher/pusher-http-go"
+	"gopkg.in/go-playground/validator.v9"
 )
 
 type (
@@ -34,9 +34,10 @@ func (controller PatientController) Routes() []common.Route {
 			Handler: controller.AddPatient,
 		},
 		{
-			Method:  echo.GET,
-			Path:    "/patients",
-			Handler: controller.GetPatients,
+			Method:     echo.GET,
+			Path:       "/patients",
+			Handler:    controller.GetPatients,
+			Middleware: []echo.MiddlewareFunc{common.JwtMiddleWare()},
 		},
 		{
 			Method:  echo.POST,
@@ -100,7 +101,7 @@ func validate_input(data interface{}) (bool, string) {
 
 func (controller PatientController) GetPatients(ctx echo.Context) error {
 
-	var patient[] model.Patient
+	var patient []model.Patient
 	db := database.GetInstance()
 	data := db.Find(&patient)
 
@@ -110,12 +111,12 @@ func (controller PatientController) GetPatients(ctx echo.Context) error {
 func (controller PatientController) UploadPhoto(ctx echo.Context) error {
 
 	var client = pusher.Client{
-        AppID:   "1323924",
-        Key:     "99b69fd4b4bbc2c8265d",
-        Secret:  "ba832086f62551866ac3",
-        Cluster: "ap1",
-        Secure:  true,
-    }
+		AppID:   "1323924",
+		Key:     "99b69fd4b4bbc2c8265d",
+		Secret:  "ba832086f62551866ac3",
+		Cluster: "ap1",
+		Secure:  true,
+	}
 	file, err := ctx.FormFile("image")
 	if err != nil {
 		ctx.JSON(http.StatusBadRequest, err)
@@ -126,7 +127,7 @@ func (controller PatientController) UploadPhoto(ctx echo.Context) error {
 	}
 	defer src.Close()
 	filePath := "./patient/photos/" + file.Filename
-	fileSrc := "http://localhost:1323/api/upload-photo/photos/" + file.Filename
+	fileSrc := "http://localhost:1323/api/upload-photo/" + file.Filename
 	dst, err := os.Create(filePath)
 	if err != nil {
 		ctx.JSON(http.StatusBadRequest, err)
@@ -148,7 +149,7 @@ func (controller PatientController) Login(ctx echo.Context) error {
 		return ctx.JSON(http.StatusBadRequest, err)
 	}
 	if user.Username != "admin" || user.Password != "1234" {
-		return ctx.JSON(http.StatusUnauthorized, "Please, try enter passowrd or username again.")
+		return ctx.JSON(http.StatusUnauthorized, echo.Map{"error": "Please, try enter passowrd or username again."})
 	}
 	accessToken, err := token.CreateToken(user.Username, token.AccessToken)
 	if err != nil {
@@ -161,4 +162,3 @@ func (controller PatientController) Login(ctx echo.Context) error {
 
 	return ctx.JSON(http.StatusOK, echo.Map{"token": user.AccessToken})
 }
-

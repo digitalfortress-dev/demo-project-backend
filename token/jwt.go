@@ -7,15 +7,15 @@ import (
 	"github.com/dgrijalva/jwt-go"
 )
 
-const AccessToken = 20
+const AccessToken = 100000000000
 
-type JWT struct {
-	secretKey string
+type Myjwt struct {
+	SecretKey string
 }
 
 func CreateToken(username string, duration time.Duration) (string, error) {
 
-	myjwt := JWT{}
+	myjwt := Myjwt{}
 	payload, err := NewPayload(username, duration)
 	if err != nil {
 		fmt.Println("error in payload token:", err)
@@ -23,6 +23,5 @@ func CreateToken(username string, duration time.Duration) (string, error) {
 	}
 	jwtToken := jwt.NewWithClaims(jwt.SigningMethodHS256, payload)
 
-	return jwtToken.SignedString([]byte(myjwt.secretKey))
-
+	return jwtToken.SignedString([]byte(myjwt.SecretKey))
 }

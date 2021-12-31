@@ -16,18 +16,17 @@ func main() {
 	api.Use(middleware.Logger())
 	api.Use(middleware.Recover())
 
-	// CORS middleware for API endpoint.
 	api.Use(middleware.CORSWithConfig(middleware.CORSConfig{
 		AllowOrigins: []string{"*"},
 		AllowMethods: []string{echo.POST, echo.GET},
-}))
+	}))
 	db := database.GetInstance()
 	db.DropTable("migrations")
 	db.DropTableIfExists(&Patient.Patient{})
 	m := database.GetMigrations(db)
 	err := m.Migrate()
 	if err == nil {
-		fmt.Println("Migrations did run successfully.")
+		fmt.Println("Migrations ran successfully.")
 	} else {
 		fmt.Println("Migrations failed.", err)
 	}

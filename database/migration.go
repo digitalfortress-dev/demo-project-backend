@@ -8,6 +8,7 @@ import (
 )
 
 func GetMigrations(db *gorm.DB) *gormigrate.Gormigrate {
+
 	return gormigrate.New(db, gormigrate.DefaultOptions, []*gormigrate.Migration{
 		{
 			ID: "20212412",
@@ -17,12 +18,6 @@ func GetMigrations(db *gorm.DB) *gormigrate.Gormigrate {
 				}
 				return nil
 			},
-			// Rollback: func(tx *gorm.DB) error {
-			// 	if err := tx.DropTable("model").Error; err != nil {
-			// 		return nil
-			// 	}
-			// 	return nil
-			// },
 		},
 	})
 
