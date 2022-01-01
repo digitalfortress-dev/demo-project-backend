@@ -7,6 +7,7 @@ import (
 	"main/database"
 	"main/patient/model"
 	"main/token"
+	"main/user/model"
 	"net/http"
 	"os"
 	"reflect"
@@ -21,16 +22,12 @@ type (
 	PatientController struct{}
 )
 
-type (
-	Auth_PatientController struct{}
-)
-
-func (controller PatientController) Routes() []common.Route {
+func (controller PatientController) SetupHandler() []common.Route {
 
 	return []common.Route{
 		{
 			Method:  echo.POST,
-			Path:    "/patient",
+			Path:    "/patients",
 			Handler: controller.AddPatient,
 		},
 		{
@@ -41,7 +38,7 @@ func (controller PatientController) Routes() []common.Route {
 		},
 		{
 			Method:  echo.POST,
-			Path:    "/upload-photo",
+			Path:    "/photos",
 			Handler: controller.UploadPhoto,
 		},
 		{
@@ -54,12 +51,12 @@ func (controller PatientController) Routes() []common.Route {
 
 func (controller PatientController) AddPatient(ctx echo.Context) error {
 
-	patient := &model.Patient{}
+	patient := &patient.Patient{}
 	err := json.NewDecoder(ctx.Request().Body).Decode(&patient)
 	if err != nil {
 		return ctx.JSON(http.StatusBadRequest, err)
 	}
-	if ok, errors := validate_input(*patient); !ok {
+	if ok, errors := ValidateInput(*patient); !ok {
 		return ctx.JSON(http.StatusBadRequest, errors)
 	}
 
@@ -69,7 +66,7 @@ func (controller PatientController) AddPatient(ctx echo.Context) error {
 	return ctx.JSON(http.StatusCreated, patient)
 }
 
-func validate_input(data interface{}) (bool, string) {
+func ValidateInput(data interface{}) (bool, string) {
 
 	var validate *validator.Validate
 	validate = validator.New()
@@ -101,7 +98,7 @@ func validate_input(data interface{}) (bool, string) {
 
 func (controller PatientController) GetPatients(ctx echo.Context) error {
 
-	var patient []model.Patient
+	var patient []patient.Patient
 	db := database.GetInstance()
 	data := db.Find(&patient)
 
@@ -127,7 +124,7 @@ func (controller PatientController) UploadPhoto(ctx echo.Context) error {
 	}
 	defer src.Close()
 	filePath := "./patient/photos/" + file.Filename
-	fileSrc := "http://localhost:1323/api/upload-photo/" + file.Filename
+	fileSrc := "http://localhost:1323/api/v1/photos/" + file.Filename
 	dst, err := os.Create(filePath)
 	if err != nil {
 		ctx.JSON(http.StatusBadRequest, err)
@@ -143,7 +140,7 @@ func (controller PatientController) UploadPhoto(ctx echo.Context) error {
 
 func (controller PatientController) Login(ctx echo.Context) error {
 
-	user := model.User{}
+	user := user.User{}
 	err := json.NewDecoder(ctx.Request().Body).Decode(&user)
 	if err != nil {
 		return ctx.JSON(http.StatusBadRequest, err)

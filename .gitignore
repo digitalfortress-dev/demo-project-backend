@@ -1,0 +1,6 @@
+ patient/.DS_Store
+go.mod
+go.sum
+main
+.DS_Store
+test/.DS_Store

@@ -11,6 +11,6 @@ type (
 	}
 
 	Controller interface {
-		Routes() []Route
+		SetupHandler() []Route
 	}
 )
