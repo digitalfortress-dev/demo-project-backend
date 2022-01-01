@@ -1,4 +1,4 @@
-package model
+package patient
 
 type (
 	Patient struct {
@@ -11,13 +11,5 @@ type (
 		AppointmentOfTime int    `json:"appointment_time"`
 		SrcPicture        string `json:"src_picture"`
 		MyId              int    `gorm:"primary_key;auto_increment;not_null" json:"id"`
-	}
-)
-
-type (
-	User struct {
-		Username    string `json:"username"`
-		Password    string `json:"password"`
-		AccessToken string `json:"access_token"`
 	}
 )
