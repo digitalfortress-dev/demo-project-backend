@@ -60,7 +60,7 @@ func (controller PatientController) AddPatient(ctx echo.Context) error {
 		return ctx.JSON(http.StatusBadRequest, errors)
 	}
 
-	db := database.GetInstance()
+	db := database.GetConfigDatabase()
 	db.Save(patient)
 
 	return ctx.JSON(http.StatusCreated, patient)
@@ -99,7 +99,7 @@ func ValidateInput(data interface{}) (bool, string) {
 func (controller PatientController) GetPatients(ctx echo.Context) error {
 
 	var patient []patient.Patient
-	db := database.GetInstance()
+	db := database.GetConfigDatabase()
 	data := db.Find(&patient)
 
 	return ctx.JSON(http.StatusOK, data.Value)

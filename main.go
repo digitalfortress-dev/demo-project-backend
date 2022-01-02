@@ -20,7 +20,7 @@ func main() {
 		AllowOrigins: []string{"*"},
 		AllowMethods: []string{echo.POST, echo.GET},
 	}))
-	db := database.GetInstance()
+	db := database.GetConfigDatabase()
 	db.DropTable("migrations")
 	db.DropTableIfExists(&Patient.Patient{})
 	m := database.GetMigrations(db)
