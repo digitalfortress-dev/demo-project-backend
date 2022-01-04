@@ -15,7 +15,7 @@ func DefineApiRoute(e *echo.Echo) {
 		routes = append(routes, controller.SetupHandler()...)
 	}
 	api := e.Group("/api/v1")
-	e.Static("api/v1", "patient/photos")
+	e.Static("api/v1/photos", "patient/photos")
 	for _, route := range routes {
 		switch route.Method {
 		case echo.POST:

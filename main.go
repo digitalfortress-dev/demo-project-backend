@@ -19,7 +19,7 @@ func main() {
 		AllowOrigins: []string{"*"},
 		AllowMethods: []string{echo.POST, echo.GET},
 	}))
-	db := database.GetInstance()
+	db := database.GetConfigDatabase()
 	database.CheckTableInDatabase(db)
 	m := database.GetMigrations(db)
 	err := m.Migrate()
