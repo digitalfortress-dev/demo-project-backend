@@ -16,14 +16,6 @@ const projectDirName = "DEMO-PROJECT-BACKEND"
 
 var instance *gorm.DB
 
-const (
-	host     = "localhost"
-	port     = 5432
-	user     = "postgres"
-	password = "1"
-	dbname   = "mydb"
-)
-
 func LoadEnv() {
 	projectNname := regexp.MustCompile(`^(.*` + projectDirName + `)`)
 	currentWorkDirectory, _ := os.Getwd()
