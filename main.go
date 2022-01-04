@@ -3,7 +3,6 @@ package main
 import (
 	"fmt"
 	"main/database"
-	Patient "main/patient/model"
 	"main/routes"
 
 	"github.com/labstack/echo/v4"
@@ -21,8 +20,7 @@ func main() {
 		AllowMethods: []string{echo.POST, echo.GET},
 	}))
 	db := database.GetConfigDatabase()
-	db.DropTable("migrations")
-	db.DropTableIfExists(&Patient.Patient{})
+	database.CheckTableInDatabase(db)
 	m := database.GetMigrations(db)
 	err := m.Migrate()
 	if err == nil {
@@ -32,5 +30,4 @@ func main() {
 	}
 	routes.DefineApiRoute(api)
 	fmt.Println(api.Start(":1323"))
-
 }

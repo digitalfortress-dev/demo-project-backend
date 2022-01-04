@@ -22,3 +22,9 @@ func GetMigrations(db *gorm.DB) *gormigrate.Gormigrate {
 	})
 
 }
+
+func CheckTableInDatabase(db *gorm.DB) {
+
+	db.DropTable("migrations")
+	db.DropTableIfExists(&Patient.Patient{})
+}
